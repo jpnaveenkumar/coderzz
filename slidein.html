@@ -1,0 +1,184 @@
+<html>
+<body>
+  <div style="display:flex">
+    <div id="tab1" style="background-color:red;width:30%">
+    </div>
+    <div id="tab2" style="background-color:yellow;width:70%">
+      <button onclick="toggle()">toggle<button/>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:100px">
+    <button onclick="spin()"> start </button>
+    <canvas id="myCanvas" width="300" height="150" style="border-radius:100%;" >
+  </div>
+  <div style="text-align:center;margin-top:50px">
+    <button onclick="spin1()"> start </button>
+    <canvas id="myCanvas1" width="300" height="150" >
+  </div>
+  <div style="text-align:center;margin-top:50px">
+    <button onclick="spin2()"> start </button>
+    <canvas id="myCanvas2" width="1000" height="2000" >
+  </div>
+  <script>
+    var istoggled = true;
+    var minWidth = 0;
+    var maxWidth = 100;
+    var limit1 = 30;
+    var limit2 = 70;
+    function toggle()
+    {
+      if(istoggled){
+        var anim = setInterval(function(){
+          limit1 = limit1 - 5;
+          limit2 = limit2 + 5;
+          document.getElementById("tab1").style.width = limit1.toString()+"%";
+          document.getElementById("tab2").style.width = limit2.toString()+"%";
+          if(limit1 == 0){
+            clearInterval(anim);
+          }
+        },30);
+        istoggled = false;
+      }
+      else{
+        var anim = setInterval(function(){
+          limit1 = limit1 + 5;
+          limit2 = limit2 - 5;
+          document.getElementById("tab1").style.width = limit1.toString()+"%";
+          document.getElementById("tab2").style.width = limit2.toString()+"%";
+          if(limit1 == 30){
+            clearInterval(anim);
+          }
+        },30);
+        istoggled = true;
+      }
+    }
+    function spin()
+    {
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+      var x1 = 0;
+      var y1 = 0;
+      var x2 = 300;
+      var y2 = 150;
+      var anim = setInterval(function(){
+        ctx.beginPath();
+        ctx.moveTo(x1,y1);
+        ctx.lineTo(x2,y2);
+        ctx.stroke();
+        x1 = x1 + 5;
+        x2 = x2 - 5;
+        if(x1==300){
+          clearInterval(anim);
+        }
+      },30);
+    }
+
+    function spin1()
+    {
+      var c = document.getElementById("myCanvas1");
+      var ctx = c.getContext("2d");
+      var x1 = 150;
+      var y1 = 0;
+      var x2 = 150;
+      var y2 = 150;
+      var x3 = 150;
+      var x4 = 150;
+      var anim = setInterval(function(){
+        ctx.beginPath();
+        ctx.moveTo(x1,y1);
+        ctx.lineTo(x2,y2);
+        ctx.stroke();
+        x1 = x1 + 5;
+        x2 = x2 - 5;
+        ctx.beginPath();
+        ctx.moveTo(x3,y1);
+        ctx.lineTo(x4,y2);
+        ctx.stroke();
+        x3 = x3 - 5;
+        x4 = x4 + 5;
+        if(x1==300){
+          clearInterval(anim);
+        }
+      },30);
+    }
+    function phase1(ctx,x1,y1,radius,side)
+    {
+      var counter = 0;
+      var anime = setInterval(function(){
+        x1=x1+5;
+        y1=y1+5;
+        ctx.beginPath();
+        ctx.arc(side=="front"? x1+5 : x1-5 ,y1,radius,0*Math.PI,2*Math.PI);
+        ctx.stroke();
+        counter = counter + 1;
+        if (counter==radius)
+        {
+          clearInterval(anime);
+          phase2(ctx,x1,y1,radius,"front");
+        }
+      },30);
+    }
+    function phase2(ctx,x1,y1,radius,side)
+    {
+      var counter = 0;
+      var anime = setInterval(function(){
+        x1=x1-5;
+        y1=y1+5;
+        ctx.beginPath();
+        ctx.arc(side=="front"? x1+5 : x1-5,y1,radius,0*Math.PI,2*Math.PI);
+        ctx.stroke();
+
+        counter = counter + 1;
+        if (counter==radius)
+        {
+          clearInterval(anime);
+          phase3(ctx,x1,y1,radius,"backside");
+        }
+      },30);
+    }
+    function phase3(ctx,x1,y1,radius,side)
+    {
+      var counter = 0;
+      var anime = setInterval(function(){
+        x1=x1-5;
+        y1=y1-5;
+        ctx.beginPath();
+        ctx.arc(side=="front"? x1+5 : x1-5,y1,radius,0*Math.PI,2*Math.PI);
+        ctx.stroke();
+        counter = counter + 1;
+        if (counter==radius)
+        {
+          clearInterval(anime);
+          phase4(ctx,x1,y1,radius,"backside");
+        }
+      },30);
+    }
+    function phase4(ctx,x1,y1,radius,side)
+    {
+      var counter = 0;
+      var anime = setInterval(function(){
+        x1=x1+5;
+        y1=y1-5;
+        ctx.beginPath();
+        ctx.arc(side=="front"? x1+5 : x1-5,y1,radius,0*Math.PI,2*Math.PI);
+        ctx.stroke();
+        counter = counter + 1;
+        if (counter==radius)
+        {
+          clearInterval(anime);
+          phase1(ctx,x1,y1+100,radius,"backside");
+        }
+      },30);
+    }
+    function spin2()
+    {
+      var radius = 50;
+      var x1 = radius;
+      var y1 = 0;
+      var c = document.getElementById('myCanvas2');
+      var ctx = c.getContext('2d');
+      phase1(ctx,500,100,radius,"front");
+    }
+  </script>
+</body>
+</html>

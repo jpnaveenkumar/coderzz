@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<div style="display:flex">
+  <div style="width:50%">
+    <canvas id="myCanvas1" style="width:500px;height:200px;">Your browser does not support the HTML5 canvas tag.</canvas>
+  </div>
+  <div style="width:50%">
+    <canvas id="myCanvas2" style="width:500px;height:200px;">Your browser does not support the HTML5 canvas tag.</canvas>
+  </div>
+</div>
+<!-- <canvas id="myCanvas1" style="width:500px;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+<canvas id="myCanvas2" style="margin-left:300px;">Your browser does not support the HTML5 canvas tag.</canvas> -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script>
+function drawCurve(id)
+{
+  var c = document.getElementById(id);
+  var ctx = c.getContext("2d");
+  ctx.beginPath();
+  ctx.arc(100, 75, 50, 0, 2 * Math.PI);
+  ctx.fillStyle="#FE81F6";
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(100, 75, 50, -1.5, 0.5 * Math.PI,true);
+  ctx.fillStyle="#BA01AE";
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(100, 75, 40, 0, 2 * Math.PI);
+  ctx.fillStyle="white";
+  ctx.fill();
+}
+
+function drawRectangle(id,data,height,width,label)
+{
+  let c = document.getElementById(id);
+  let ctx = c.getContext("2d");
+
+  var high = Math.max(...data);
+  var heights = new Array();
+  for(var i=0;i<data.length;i++)
+  {
+    var percentage = (data[i]*100)/high;
+    heights.push(percentage*height/100);
+  }
+  // var top = $("#"+id).position().top;
+  // var left = $("#"+id).position().left;
+  var top = 10;
+  var left = 10;
+  //alert(left);
+  var templeft = left;
+  var maxHeight = Math.max(...heights);
+  ctx.beginPath();
+  ctx.font = "8px Arial";
+  ctx.fillText(label,10,10);
+  for(var j=0;j<data.length;j++)
+  {
+    templeft = templeft + width + 5;
+    var diffHeight = maxHeight - heights[j];
+    var temptop = top + diffHeight;
+    //alert(heights);
+    ctx.beginPath();
+    ctx.rect(templeft, temptop, width, heights[j]);
+    if(j%2==0){
+      ctx.fillStyle="#BA01AE";
+    }
+    else{
+      ctx.fillStyle="#FE81F6";
+    }
+    ctx.fill();
+
+    ctx.font = "8px Arial";
+    ctx.fillStyle = "#BA01AE";
+    ctx.fillText(data[j],templeft+3,maxHeight+25);
+  }
+}
+drawRectangle("myCanvas1",[3,7,3,6,10,2,5,7,9,1,4,2],80,10,"My Dummy Graph1");
+drawRectangle("myCanvas2",[3,7,3,6,10,2,5,7],80,10,"My Dummy Graph2");
+//drawCurve("myCanvas1");
+//drawCurve("myCanvas2");
+</script>
+</body>
+</html>
